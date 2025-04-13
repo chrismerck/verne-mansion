@@ -22,6 +22,127 @@ CREATIVE_MODEL = "gpt-4o"
 LOGICAL_MODEL = "gpt-4o"
 
 # -------------------------------------------------------------------
+#  PROMPT TEMPLATES
+# -------------------------------------------------------------------
+
+# 1. Game Structure Planner Prompts
+GAME_STRUCTURE_SYSTEM = (
+    "You are an expert game-designer assistant. "
+    "You will produce JSON only—no extra commentary or markdown formatting. "
+    "Your job is to output a structured overview of a mansion layout suitable for a puzzle-adventure game. "
+    "Your response must be valid, parseable JSON."
+)
+
+def get_game_structure_user_prompt(user_prompt):
+    return f"""
+    Generate a structured overview of a mansion layout for a puzzle-adventure game based on:
+    {user_prompt}
+    
+    Requirements:
+    - 8 to 12 rooms
+    - Each room has a name, a theme, and connections to other rooms
+    - Include locked doors or secret passages where appropriate
+    - Output valid JSON only
+    """
+
+# 2. Room Definition Prompts
+ROOM_DEFINITION_SYSTEM = (
+    "You are an expert puzzle-adventure designer. "
+    "Produce valid JSON only—no additional text or markdown. "
+    "Your response must be parseable as valid JSON."
+)
+
+def get_room_definition_user_prompt(room_name, theme_description):
+    return f"""
+    Expand the mansion room labeled "{room_name}" with theme "{theme_description}".
+    Provide a JSON structure containing:
+    - "interactable_objects": array of objects/furniture
+    - "entry_exit_points": array of doorways/locks/passages
+    - "hidden_mechanics": array of any hidden features or special interactive elements
+    """
+
+# 3. Puzzle Generator Prompts
+PUZZLE_GENERATOR_SYSTEM = (
+    "You are a puzzle-design specialist. "
+    "Output puzzle details in valid JSON only—no extra text, explanations, or markdown. "
+    "Your entire response must be valid JSON."
+)
+
+def get_puzzle_generator_user_prompt(object_name, room_name):
+    return f"""
+    Design a puzzle involving the object "{object_name}" in room "{room_name}".
+    Provide:
+    - "puzzle_setup": how it appears or is discovered
+    - "interactions": steps required to solve it
+    - "logic": numeric/symbolic/logic pattern
+    - "solution": the final unlocking or reveal
+    - "reward": outcome of solving
+    Output valid JSON only.
+    """
+
+# 4. Clue Generator Prompts
+CLUE_GENERATOR_SYSTEM = (
+    "You are an expert in designing subtle puzzle clues. "
+    "Output valid JSON only—no additional explanations, text, or markdown. "
+    "Your complete response must be parseable as proper JSON."
+)
+
+def get_clue_generator_user_prompt(object_name, room_name, puzzle_details):
+    return f"""
+    Based on the puzzle for the object "{object_name}" in room "{room_name}", 
+    create 2-4 subtle clues that guide the player without solving it outright.
+    For each clue, specify:
+    - "location": where it is found
+    - "form": note, inscription, scratchings, etc.
+    - "hint_text": the subtle hint
+    
+    Puzzle details:
+    {json.dumps(puzzle_details, indent=2)}
+    
+    Output valid JSON only.
+    """
+
+# 5. Room Description Prompts
+ROOM_DESCRIPTION_SYSTEM = (
+    "You are an immersive narrative writer. "
+    "Output valid JSON only—no additional commentary or markdown. "
+    "Your entire response must be pure, parseable JSON with a single description field."
+)
+
+def get_room_description_user_prompt(room_name, room_data):
+    return f"""
+    Generate a concise description (5-8 sentences) for the room "{room_name}" 
+    in the mansion, incorporating references to relevant objects/puzzles 
+    without revealing solutions.
+    
+    room_data:
+    {json.dumps(room_data, indent=2)}
+    
+    Return JSON: {{"description": "Your descriptive text"}}
+    """
+
+# 6. Room Verification Prompts
+ROOM_VERIFICATION_SYSTEM = (
+    "You are a detail-oriented game logic verifier. "
+    "Check for logical consistency, puzzle solvability, and clue alignment. "
+    "Output valid JSON only—no explanations, text, or markdown. "
+    "Your entire response must be valid JSON."
+)
+
+def get_room_verification_user_prompt(room_name, room_details):
+    return f"""
+    Review the following data for room '{room_name}':
+    {json.dumps(room_details, indent=2)}
+
+    1) Check puzzle and solution consistency.
+    2) Ensure clues align logically with the puzzle solutions.
+    3) Confirm entry/exit points match the overall mansion structure (if provided).
+    4) Provide final JSON with any corrections or if all is good, mark it as approved.
+
+    Only output valid JSON.
+    """
+
+# -------------------------------------------------------------------
 #  Helper function to send messages to the OpenAI ChatCompletion API.
 # -------------------------------------------------------------------
 def sanitize_filename(name):
@@ -144,25 +265,9 @@ def game_structure_planner(user_prompt):
     Generates a structured overview of the mansion layout, 
     returning JSON describing rooms and connections.
     """
-    system_instructions = (
-        "You are an expert game-designer assistant. "
-        "You will produce JSON only—no extra commentary or markdown formatting. "
-        "Your job is to output a structured overview of a mansion layout suitable for a puzzle-adventure game. "
-        "Your response must be valid, parseable JSON."
-    )
-    user_request = f"""
-    Generate a structured overview of a mansion layout for a puzzle-adventure game based on:
-    {user_prompt}
-    
-    Requirements:
-    - 8 to 12 rooms
-    - Each room has a name, a theme, and connections to other rooms
-    - Include locked doors or secret passages where appropriate
-    - Output valid JSON only
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": GAME_STRUCTURE_SYSTEM},
+        {"role": "user", "content": get_game_structure_user_prompt(user_prompt)}
     ]
     log_base = os.path.join("artifacts", "mansion_structure")
     response = create_chat_completion(
@@ -182,21 +287,9 @@ def define_room(room_name, theme_description):
     Expands on a single room by listing interactable objects, 
     entry/exit points, secrets, etc., returning JSON.
     """
-    system_instructions = (
-        "You are an expert puzzle-adventure designer. "
-        "Produce valid JSON only—no additional text or markdown. "
-        "Your response must be parseable as valid JSON."
-    )
-    user_request = f"""
-    Expand the mansion room labeled "{room_name}" with theme "{theme_description}".
-    Provide a JSON structure containing:
-    - "interactable_objects": array of objects/furniture
-    - "entry_exit_points": array of doorways/locks/passages
-    - "hidden_mechanics": array of any hidden features or special interactive elements
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": ROOM_DEFINITION_SYSTEM},
+        {"role": "user", "content": get_room_definition_user_prompt(room_name, theme_description)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     log_base = os.path.join("artifacts", "room_definition", sanitized_room_name)
@@ -217,24 +310,9 @@ def generate_puzzle(object_name, room_name):
     Creates a puzzle scenario around a specific object in a room.
     Returns puzzle details in JSON form.
     """
-    system_instructions = (
-        "You are a puzzle-design specialist. "
-        "Output puzzle details in valid JSON only—no extra text, explanations, or markdown. "
-        "Your entire response must be valid JSON."
-    )
-    user_request = f"""
-    Design a puzzle involving the object "{object_name}" in room "{room_name}".
-    Provide:
-    - "puzzle_setup": how it appears or is discovered
-    - "interactions": steps required to solve it
-    - "logic": numeric/symbolic/logic pattern
-    - "solution": the final unlocking or reveal
-    - "reward": outcome of solving
-    Output valid JSON only.
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": PUZZLE_GENERATOR_SYSTEM},
+        {"role": "user", "content": get_puzzle_generator_user_prompt(object_name, room_name)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     sanitized_object_name = sanitize_filename(object_name)
@@ -256,27 +334,9 @@ def generate_clues(object_name, room_name, puzzle_details):
     Generates subtle hints or clues for the puzzle, possibly 
     placed in different rooms. Returns JSON with 2-4 clue entries.
     """
-    system_instructions = (
-        "You are an expert in designing subtle puzzle clues. "
-        "Output valid JSON only—no additional explanations, text, or markdown. "
-        "Your complete response must be parseable as proper JSON."
-    )
-    user_request = f"""
-    Based on the puzzle for the object "{object_name}" in room "{room_name}", 
-    create 2-4 subtle clues that guide the player without solving it outright.
-    For each clue, specify:
-    - "location": where it is found
-    - "form": note, inscription, scratchings, etc.
-    - "hint_text": the subtle hint
-    
-    Puzzle details:
-    {json.dumps(puzzle_details, indent=2)}
-    
-    Output valid JSON only.
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": CLUE_GENERATOR_SYSTEM},
+        {"role": "user", "content": get_clue_generator_user_prompt(object_name, room_name, puzzle_details)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     sanitized_object_name = sanitize_filename(object_name)
@@ -299,24 +359,9 @@ def describe_room(room_name, room_data):
     referencing key objects without spoiling puzzles.
     Returns JSON with a single field "description".
     """
-    system_instructions = (
-        "You are an immersive narrative writer. "
-        "Output valid JSON only—no additional commentary or markdown. "
-        "Your entire response must be pure, parseable JSON with a single description field."
-    )
-    user_request = f"""
-    Generate a concise description (5-8 sentences) for the room "{room_name}" 
-    in the mansion, incorporating references to relevant objects/puzzles 
-    without revealing solutions.
-    
-    room_data:
-    {json.dumps(room_data, indent=2)}
-    
-    Return JSON: {{"description": "Your descriptive text"}}
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": ROOM_DESCRIPTION_SYSTEM},
+        {"role": "user", "content": get_room_description_user_prompt(room_name, room_data)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     log_base = os.path.join("artifacts", "description", sanitized_room_name)
@@ -338,26 +383,9 @@ def verify_room(room_name, room_details):
     This LLM verifies puzzle solutions, clue coherence, etc.
     Returns either validated JSON or corrected JSON.
     """
-    system_instructions = (
-        "You are a detail-oriented game logic verifier. "
-        "Check for logical consistency, puzzle solvability, and clue alignment. "
-        "Output valid JSON only—no explanations, text, or markdown. "
-        "Your entire response must be valid JSON."
-    )
-    user_request = f"""
-    Review the following data for room '{room_name}':
-    {json.dumps(room_details, indent=2)}
-
-    1) Check puzzle and solution consistency.
-    2) Ensure clues align logically with the puzzle solutions.
-    3) Confirm entry/exit points match the overall mansion structure (if provided).
-    4) Provide final JSON with any corrections or if all is good, mark it as approved.
-
-    Only output valid JSON.
-    """
     messages = [
-        {"role": "system", "content": system_instructions},
-        {"role": "user", "content": user_request}
+        {"role": "system", "content": ROOM_VERIFICATION_SYSTEM},
+        {"role": "user", "content": get_room_verification_user_prompt(room_name, room_details)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     log_base = os.path.join("artifacts", "verification", sanitized_room_name)
