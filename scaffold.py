@@ -16,10 +16,10 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-#CREATIVE_MODEL = "gpt-4.5-preview"
-#LOGICAL_MODEL = "o1"
-CREATIVE_MODEL = "gpt-4o"
-LOGICAL_MODEL = "gpt-4o"
+CREATIVE_MODEL = "gpt-4.5-preview"
+LOGICAL_MODEL = "o1"
+#CREATIVE_MODEL = "gpt-4o"
+#LOGICAL_MODEL = "gpt-4o"
 
 # -------------------------------------------------------------------
 #  PROMPT TEMPLATES
@@ -27,119 +27,124 @@ LOGICAL_MODEL = "gpt-4o"
 
 # 1. Game Structure Planner Prompts
 GAME_STRUCTURE_SYSTEM = (
-    "You are an expert game-designer assistant. "
-    "You will produce JSON only—no extra commentary or markdown formatting. "
-    "Your job is to output a structured overview of a mansion layout suitable for a puzzle-adventure game. "
-    "Your response must be valid, parseable JSON."
+    "You are a skilled puzzle-game designer, specializing in Victorian-era mysteries inspired by Jules Verne. "
+    "Produce valid JSON output only, omitting any additional comments or formatting."
 )
 
 def get_game_structure_user_prompt(user_prompt):
     return f"""
-    Generate a structured overview of a mansion layout for a puzzle-adventure game based on:
+    Based explicitly on the following background lore, devise a detailed and intriguing mansion layout for a puzzle-adventure web game:
+
     {user_prompt}
-    
+
     Requirements:
-    - 8 to 12 rooms
-    - Each room has a name, a theme, and connections to other rooms
-    - Include locked doors or secret passages where appropriate
-    - Output valid JSON only
+    - Precisely 30 uniquely themed rooms influenced by Lucien Ravenshade's Victorian era eccentricities and Jules Verne-inspired inventions.
+    - Each room explicitly named (evocative and theme-appropriate) and briefly described.
+    - Clearly outline room exits, including stair cases, doorways, locked doors, or secret passages of any kind. (Do not specify the room names of the exits, just the directions.) 
+    - Valid exit directions are N, S, E, W, U (up) and D (down).
+    - Start with "Grand Vestibule" and end with "Portal Chamber".
+    - Keep output strictly in valid JSON format:
+    """ + r"""
+    {"rooms": [ {"name": "Concise Room Name", "theme": "Room Thematic description", "exits": {"N": "locked door", "U": "staircase", "W": "hidden passage behind bookshelf"} }] }
     """
 
 # 2. Room Definition Prompts
 ROOM_DEFINITION_SYSTEM = (
-    "You are an expert puzzle-adventure designer. "
-    "Produce valid JSON only—no additional text or markdown. "
-    "Your response must be parseable as valid JSON."
+    "You are an expert adventure room designer, deeply familiar with Victorian-Era aesthetics and fantastical Jules Verne-inspired machinery. "
+    "Output detailed JSON only; omit any commentary or markdown formatting."
 )
 
 def get_room_definition_user_prompt(room_name, theme_description):
     return f"""
-    Expand the mansion room labeled "{room_name}" with theme "{theme_description}".
-    Provide a JSON structure containing:
-    - "interactable_objects": array of objects/furniture
-    - "entry_exit_points": array of doorways/locks/passages
-    - "hidden_mechanics": array of any hidden features or special interactive elements
+    Expand into vivid detail the room titled "{room_name}", specifically considering the theme: "{theme_description}" from Ravenshade Manor's Victorian puzzle-adventure.
+
+    Provide exactly the following in JSON format:
+    - "interactable_objects": an array of distinct room objects (e.g., mechanical contraptions, maps, furniture, artifacts, Verne-inspired technology).
+    - "entry_exit_points": clearly categorized doorways, locked doors, or concealed secret passages connecting to neighboring rooms.
+    - "hidden_mechanics": special hidden interactive features aligned with Lucien Ravenshade's experiments and Victorian-era ingenuity.
+
+    Output JSON only, strictly conforming to clarity and readability.
     """
 
 # 3. Puzzle Generator Prompts
 PUZZLE_GENERATOR_SYSTEM = (
-    "You are a puzzle-design specialist. "
-    "Output puzzle details in valid JSON only—no extra text, explanations, or markdown. "
-    "Your entire response must be valid JSON."
+    "You are a specialist puzzle creator, accurately designing puzzles inspired by Victorian-era exploration and speculative science akin to Jules Verne's inventions. "
+    "Return puzzle details exclusively in parseable, concise JSON form."
 )
 
 def get_puzzle_generator_user_prompt(object_name, room_name):
     return f"""
-    Design a puzzle involving the object "{object_name}" in room "{room_name}".
-    Provide:
-    - "puzzle_setup": how it appears or is discovered
-    - "interactions": steps required to solve it
-    - "logic": numeric/symbolic/logic pattern
-    - "solution": the final unlocking or reveal
-    - "reward": outcome of solving
-    Output valid JSON only.
+    Invent a puzzle involving the Victorian and Jules Verne-inspired object "{object_name}" in the Ravenshade Manor room "{room_name}":
+
+    Specifically provide in JSON format:
+    - "puzzle_setup": initial reveal and how the player finds it within the room (concealed mechanism, subtle indicator, etc.).
+    - "interactions": meticulous steps or actions needed (activation sequences, logical reasoning, machine operations).
+    - "logic": clearly stated logic, symbolic, numerical or spatial reasoning underpinning the puzzle.
+    - "solution": final solved state or solution clearly explained.
+    - "reward": meaningful outcome such as opening secret passages, gaining an artifact, revealing hidden narrative information related to Lucien's explorations or Chronal Resonators.
+
+    Provide valid and structured JSON only.
     """
 
 # 4. Clue Generator Prompts
 CLUE_GENERATOR_SYSTEM = (
-    "You are an expert in designing subtle puzzle clues. "
-    "Output valid JSON only—no additional explanations, text, or markdown. "
-    "Your complete response must be parseable as proper JSON."
+    "You are a puzzle clue design expert, adept at subtly guiding players in Jules Verne-inspired Victorian puzzle adventures. "
+    "Output clearly structured, valid JSON only, free from extraneous explanation or text."
 )
 
 def get_clue_generator_user_prompt(object_name, room_name, puzzle_details):
     return f"""
-    Based on the puzzle for the object "{object_name}" in room "{room_name}", 
-    create 2-4 subtle clues that guide the player without solving it outright.
-    For each clue, specify:
-    - "location": where it is found
-    - "form": note, inscription, scratchings, etc.
-    - "hint_text": the subtle hint
-    
-    Puzzle details:
+    From these puzzle details involving object "{object_name}" in the Ravenshade Manor room named "{room_name}", carefully design 2 to 4 subtly placed clues that support player discovery without explicitly revealing solutions.
+
+    Each clue must explicitly indicate:
+    - "location": a different room or specific hidden object within Ravenshade Manor where the clue is located.
+    - "form": precisely described form of clue (notes, scribbled margins, engravings, faded sketches, etc.) suitable to Victorian-era adventuring.
+    - "hint_text": elegantly subtle textual hints gently illuminating puzzle logic without direct spoilers.
+
+    Puzzle details provided:
     {json.dumps(puzzle_details, indent=2)}
-    
-    Output valid JSON only.
+
+    Output JSON strictly.
     """
 
 # 5. Room Description Prompts
 ROOM_DESCRIPTION_SYSTEM = (
-    "You are an immersive narrative writer. "
-    "Output valid JSON only—no additional commentary or markdown. "
-    "Your entire response must be pure, parseable JSON with a single description field."
+    "You are a highly talented, atmospheric narrative writer skilled in crafting evocative scenes influenced by Victorian mysteries and Jules Verne's speculative technology. "
+    "Your output must strictly be concise JSON containing a single elegantly descriptive text field."
 )
 
 def get_room_description_user_prompt(room_name, room_data):
     return f"""
-    Generate a concise description (5-8 sentences) for the room "{room_name}" 
-    in the mansion, incorporating references to relevant objects/puzzles 
-    without revealing solutions.
-    
-    room_data:
+    Write an immersive, atmospheric description (5-8 sentences) for the Ravenshade Manor room "{room_name}". 
+
+    Your description should thoughtfully weave references to interactable objects, hints of hidden mechanisms inspired by Lucien Ravenshade's explorations, puzzles, and Victorian-era atmosphere, avoiding direct spoilers. Ensure an enticing, mysterious atmosphere hinting at deeper secrets related to Ravenshade's discoveries and eccentric ingenuity.
+
+    Room details provided:
     {json.dumps(room_data, indent=2)}
-    
-    Return JSON: {{"description": "Your descriptive text"}}
+
+    Return strictly JSON: {{"description": "Your generated evocative atmospheric description here."}}
     """
 
 # 6. Room Verification Prompts
 ROOM_VERIFICATION_SYSTEM = (
-    "You are a detail-oriented game logic verifier. "
-    "Check for logical consistency, puzzle solvability, and clue alignment. "
-    "Output valid JSON only—no explanations, text, or markdown. "
-    "Your entire response must be valid JSON."
+    "You are meticulous and detail-oriented, tasked with confirming logical integrity and puzzle consistency in Victorian-era puzzle adventures. "
+    "Provide strictly structured and clear JSON results only, without additional comments or markdown formatting."
 )
 
 def get_room_verification_user_prompt(room_name, room_details):
     return f"""
-    Review the following data for room '{room_name}':
+    Carefully verify every element provided for Ravenshade Manor room '{room_name}', detailed as follows:
     {json.dumps(room_details, indent=2)}
 
-    1) Check puzzle and solution consistency.
-    2) Ensure clues align logically with the puzzle solutions.
-    3) Confirm entry/exit points match the overall mansion structure (if provided).
-    4) Provide final JSON with any corrections or if all is good, mark it as approved.
+    Explicitly perform the following checks and correct any issues:
+    1) Validate puzzle logic, ensuring absolute clarity in interactions and solvable solutions clearly reflecting Victorian-era ingenuity, Jules Verne-inspired designs, and Ravenshade narrative consistency.
+    2) Examine provided clues carefully, ensuring all clues logically align and effectively guide the puzzle's solution without direct spoilers.
+    3) Verify the accuracy and logical connectivity of all listed entry/exit points, locked doors, or secret passages considering overall mansion structure context.
+    4) Check description against puzzles and interactable objects to ensure absolute coherence and subtlety.
 
-    Only output valid JSON.
+    If corrections are necessary, provide clearly labeled corrections; otherwise, explicitly indicate in JSON that the room is fully validated and approved without changes.
+
+    Output this strictly structured information as clear, readable JSON only.
     """
 
 # -------------------------------------------------------------------
@@ -150,6 +155,35 @@ def sanitize_filename(name):
     name = re.sub(r'[^\w\s-]', '', name).strip() # Remove non-alphanumeric (allow whitespace and hyphens)
     name = re.sub(r'[-\s]+', '_', name) # Replace spaces/hyphens with underscores
     return name
+
+def load_chat_from_file(log_file_path):
+    """
+    Load a cached chat response from a file.
+    Returns the extracted JSON response if the file exists, None otherwise.
+    """
+    if not os.path.exists(log_file_path):
+        return None
+    
+    try:
+        with open(log_file_path, "r") as f:
+            content = f.read()
+        
+        # Extract the response content between the assistant message and usage sections
+        response_section = re.search(r"## Assistant Message ##\n([\s\S]*?)\n\n---------- USAGE ----------", content)
+        if response_section:
+            response_content = response_section.group(1).strip()
+            # Verify it's valid JSON
+            try:
+                json.loads(response_content)
+                print(f"Using cached response from {log_file_path}")
+                return response_content
+            except json.JSONDecodeError:
+                print(f"Warning: Cached response in {log_file_path} is not valid JSON.")
+                return None
+        return None
+    except Exception as e:
+        print(f"Error reading cached chat file {log_file_path}: {e}")
+        return None
 
 def create_chat_completion(messages, model=CREATIVE_MODEL, temperature=0.7, log_file_base=None, step_name=""):
     """
@@ -166,6 +200,12 @@ def create_chat_completion(messages, model=CREATIVE_MODEL, temperature=0.7, log_
         log_dir = os.path.dirname(log_file_path)
         if log_dir: # Avoid error if log_file_base has no directory part
              os.makedirs(log_dir, exist_ok=True)
+        
+        # Check if there's a cached response
+        cached_response = load_chat_from_file(log_file_path)
+        if cached_response:
+            return cached_response
+        
         print(f"Querying {step_name} for {log_file_path}...")
 
     try:
@@ -407,8 +447,27 @@ def main_example():
     # 1) Get mansion structure from user prompt
     # (In a real app, user_prompt might come from external input)
     user_prompt = (
-        "We want a creepy Victorian mansion with interconnected secret passages "
-        "and a few locked doors, oriented around puzzle-solving."
+        """
+        In the waning years of the 19th century, Lucien Ravenshade, a scholar and explorer of extraordinary ambition and eccentricity, had become an enigma whispered about in drawing rooms across Europe. Born into great wealth, Ravenshade found conventional pursuits unworthy of his restless imagination. His insatiable curiosity, matched only by his boundless resources, drove him across oceans and continents, delving into the unknown realms of both science and myth.
+
+Inspired by the visionary journeys chronicled by his contemporaries—such as Professor Pierre Aronnax's undersea adventures aboard Captain Nemo’s Nautilus, or Phileas Fogg’s legendary voyage around the world—Lucien undertook expeditions into the most remote and forbidding regions of the earth. Each voyage brought back peculiar artifacts, volumes of rare lore, and whispered rumors of discoveries too fantastic to reveal openly.
+
+Yet, it was in the quiet countryside of Northern England that Lucien chose to build Ravenshade Manor. Designed with intricate complexity and riddled with concealed passages, the mansion was more than a mere home: it was a manifestation of Lucien’s obsession with secrecy and discovery. Within its walls, he amassed an unparalleled collection of treasures: ancient maps inscribed in forgotten tongues, contraptions engineered from blueprints too advanced for their era, and fragments of civilizations said to exist only in legend.
+
+In his latter years, Lucien became increasingly withdrawn, speaking cryptically of a groundbreaking revelation—an invention or perhaps a discovery—that would forever alter humanity’s understanding of time and space. He filled his journals with obscure references to "Chronal Resonators," machines capable of bending reality, and doors "between worlds." Drawing from the speculative visions of Jules Verne himself, Lucien hinted at realms buried beneath the earth, submerged in the depths of the ocean, or hidden among the clouds.
+
+Then, without explanation, Lucien vanished.
+
+For decades thereafter, Ravenshade Manor stood sealed and silent, guarded by a trust whose instructions forbade entry except under extraordinary circumstances. Persistent rumors suggested the mansion was more alive than abandoned—strange lights flickering in windows, spectral figures glimpsed through curtains, and music drifting hauntingly from empty halls. The townsfolk whispered that Lucien had not truly departed but instead become ensnared in his own experiments, caught between realities.
+
+Now, a century later, you—a historian renowned for your expertise on Victorian-era mysteries—receive a cryptic invitation bearing the Ravenshade family seal. Curious and compelled by the offer of uncovering truths long buried, you journey to Ravenshade Manor. But upon crossing the threshold, it swiftly becomes apparent that Lucien’s legacy remains active, his puzzles, secrets, and devices waiting patiently for someone clever and bold enough to unravel them.
+
+Each room within Ravenshade Manor is layered with complexity, as if the house itself were an immense puzzle designed by Lucien to protect—and perhaps reveal—his ultimate discovery. From locked chambers and hidden laboratories to secret observatories observing impossible constellations, every passageway opened and puzzle solved draws you closer to Lucien's greatest secret: a device capable of transcending the limitations of space and time.
+
+Yet the mansion is no passive vault; its enigmatic machinery, influenced by Lucien’s dabbling with forces he scarcely understood, constantly rearranges pathways and puzzles, challenging you anew with each step forward. Ravenshade Manor demands intelligence, observation, and courage. To succeed, you must not only decipher the puzzles but understand the ambitions and fears of Lucien Ravenshade himself, unraveling a mystery that spans realms both known and unknowable.
+
+Ultimately, your exploration will determine whether Lucien Ravenshade’s work was madness or genius, and if the secret he left behind holds the potential to illuminate humanity’s future—or doom it.
+"""
     )
     mansion_structure = game_structure_planner(user_prompt)
 
