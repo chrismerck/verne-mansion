@@ -1,0 +1,96 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+    color: #0f0;
+    background-color: #000;
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+#console-output {
+    padding: 20px 20px 30px 20px; /* Add more bottom padding */
+    overflow-y: auto; /* Add scroll if text overflows */
+    flex-grow: 1;
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    font-size: 1.2em;
+    line-height: 1.5;
+    text-shadow: 0 0 5px #0f0; /* Add a subtle glow */
+    background: rgba(0, 0, 0, 0.6); /* Slightly darker background for better text readability */
+    max-height: calc(100% - 60px); /* Ensure space for input plus some buffer */
+    display: flex;
+    flex-direction: column;
+}
+
+#console-output > div {
+    margin-bottom: 8px; /* Add space between text blocks */
+    width: 100%;
+    word-break: break-word; /* Ensure long words wrap */
+}
+
+.typewriter-char {
+    opacity: 0;
+    animation: fadeIn 0.02s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+#input-line {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #111; /* Slightly different background for input area */
+    border-top: 1px solid #0f0;
+}
+
+#prompt {
+    margin-right: 10px;
+    font-size: 1.2em;
+    text-shadow: 0 0 5px #0f0;
+}
+
+#command-input {
+    flex-grow: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #0f0;
+    font-family: inherit;
+    font-size: 1.2em;
+    text-shadow: 0 0 5px #0f0;
+    caret-color: #0f0; /* Ensure cursor color matches text */
+    animation: blink 1s step-end infinite;
+}
+
+/* Blinking cursor effect */
+@keyframes blink {
+    from, to { border-right: 2px solid #0f0; }
+    50% { border-right-color: transparent; }
+}
+
+#command-input:focus {
+    animation: none; /* Stop blinking when focused for typing */
+    border-right: 2px solid #0f0; /* Keep cursor visible */
+}
+
+/* Style for bolded action words */
+b {
+    font-weight: bold;
+    color: #fff; /* Make actions stand out more */
+    text-shadow: 0 0 7px #fff;
+    display: inline-block; /* Prevent splitting across lines */
+} 

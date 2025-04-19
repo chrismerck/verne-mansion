@@ -1,0 +1,125 @@
+# Step: Room Definition (Grand Vestibule)
+# Model: gpt-4.5-preview
+# Temperature: 0.7
+
+## System Message ##
+You are an expert adventure room designer, deeply familiar with Victorian-Era aesthetics and fantastical Jules Verne-inspired machinery. Output detailed JSON only; omit any commentary or markdown formatting.
+
+## User Message ##
+
+    Expand into vivid detail the room titled "Grand Vestibule", specifically considering the theme: "A grand entrance hall adorned with ornate mirrors, marble statues, and an intricate mosaic depicting mythical voyages." from Ravenshade Manor's Victorian puzzle-adventure.
+
+    The room has the following exits: {'N': 'large oak doors', 'E': 'arched doorway', 'W': 'arched doorway', 'U': 'grand staircase'}
+
+    Provide exactly the following in JSON format:
+    - "interactable_objects": an array of distinct room objects (e.g., mechanical contraptions, maps, furniture, artifacts, Verne-inspired technology).
+    - "entry_exit_points": clearly categorized doorways, locked doors, or concealed secret passages connecting to neighboring rooms.
+    - "mechanics": interactive features aligned with Lucien Ravenshade's experiments and Victorian-era ingenuity.
+
+    Please consider that the interaction with the room will be done through simple text commands or list of available actions,
+    and the graphics will be static images.
+
+    Output JSON only, strictly conforming to clarity and readability.
+    
+
+---------- RESPONSE ----------
+
+## Assistant Message ##
+{
+  "room_title": "Grand Vestibule",
+  "interactable_objects": [
+    {
+      "name": "Ornate Gilded Mirrors",
+      "description": "Massive mirrors framed in intricate gold leaf, reflecting the hall's grandeur. Closer inspection reveals subtle engravings depicting hidden messages and symbols.",
+      "interaction": "Inspect mirrors to uncover cryptic symbols useful for puzzles."
+    },
+    {
+      "name": "Marble Statues",
+      "description": "Life-sized statues carved from polished marble, depicting renowned explorers and mythical beings. Each statue bears an inscription hinting toward Ravenshade's secret experiments.",
+      "interaction": "Examine inscriptions on statues to obtain clues and narrative context."
+    },
+    {
+      "name": "Intricate Mosaic Floor",
+      "description": "A magnificent mosaic, painstakingly crafted from tiny colored tiles, illustrating fantastical voyages inspired by Jules Verne's tales, including airships, submarines, and legendary islands.",
+      "interaction": "Study the mosaic to reveal hidden patterns and sequences that aid puzzle-solving."
+    },
+    {
+      "name": "Mechanical Orrery",
+      "description": "A brass-and-copper model depicting celestial bodies and their orbits. Driven by clockwork mechanisms, the orrery hums softly, its gears turning slowly, projecting faint astronomical patterns upon the walls.",
+      "interaction": "Activate or adjust the orrery to unlock hidden compartments or trigger events."
+    },
+    {
+      "name": "Victorian Pneumatic Tube Station",
+      "description": "A set of brass pneumatic tubes extending from an ornate console, complete with levers and valves. A glass canister sits ready to carry messages or small items between rooms.",
+      "interaction": "Place notes or small artifacts into the tube canister and activate it to communicate with other rooms or receive clues."
+    },
+    {
+      "name": "Decorative Steampunk Chronometer",
+      "description": "An elaborate, steam-powered clockwork device encased in glass and brass, its gears visible and ticking with rhythmic precision. Its hands move erratically, suggesting an unusual mechanism beneath.",
+      "interaction": "Manipulate the chronometer's gears and levers to synchronize hidden mechanisms within the manor."
+    }
+  ],
+  "entry_exit_points": {
+    "accessible_doors": [
+      {
+        "direction": "N",
+        "description": "Large oak double doors intricately carved with motifs of exploration and discovery; leading northward deeper into Ravenshade Manor."
+      },
+      {
+        "direction": "E",
+        "description": "Arched doorway framed by decorative columns, leading east toward the Manor's library and study wings."
+      },
+      {
+        "direction": "W",
+        "description": "Arched doorway adorned with sculpted ivy motifs, leading west toward the conservatory and botanical gallery."
+      },
+      {
+        "direction": "U",
+        "description": "Grand marble staircase with polished brass railings spiraling upward toward the manor's upper floors and private chambers."
+      }
+    ],
+    "locked_doors": [
+      {
+        "name": "Basement Entrance",
+        "location": "Concealed within the mosaic floor",
+        "description": "A hidden trapdoor blended seamlessly into the mosaic, locked by a complex mechanical latch system. Only activated by solving the mosaic puzzle.",
+        "unlock_condition": "Solve the mosaic puzzle by aligning tiles into correct sequence."
+      }
+    ],
+    "secret_passages": [
+      {
+        "name": "Mirror Passageway",
+        "location": "Behind the largest gilded mirror",
+        "description": "A secret corridor concealed behind the central mirror, accessible by correctly interpreting and pressing hidden symbols in the mirror's frame.",
+        "unlock_condition": "Decode and activate cryptic symbols around the mirror frame."
+      }
+    ]
+  },
+  "mechanics": [
+    {
+      "name": "Mosaic Puzzle",
+      "description": "Tiles of the mosaic floor shift and rotate to align images into coherent mythical voyages, unlocking the hidden basement entrance upon completion.",
+      "interaction": "Shift and rotate mosaic tiles to solve the puzzle."
+    },
+    {
+      "name": "Mirror Symbol Cipher",
+      "description": "Engravings on the gilded mirrors form a cipher puzzle. Correctly decoding and activating specific symbols reveals secret compartments or hidden passages.",
+      "interaction": "Examine and decode mirror engravings to find hidden triggers."
+    },
+    {
+      "name": "Clockwork Synchronization",
+      "description": "Adjusting the steampunk chronometer's gears and levers in synchronization with the mechanical orrery triggers concealed mechanisms and events throughout the manor.",
+      "interaction": "Manipulate clockwork devices to unlock new interactive elements and pathways."
+    },
+    {
+      "name": "Pneumatic Tube Communications",
+      "description": "Use the pneumatic tube system to send and receive clues, messages, or small puzzles between rooms, creating a dynamic interactive environment.",
+      "interaction": "Send or receive items and messages via the pneumatic tube system."
+    }
+  ]
+}
+
+---------- USAGE ----------
+Prompt Tokens: 268
+Completion Tokens: 1051
+Total Tokens: 1319

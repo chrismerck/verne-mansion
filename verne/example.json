@@ -1,0 +1,90 @@
+{
+  "start_room": "Grand Foyer",
+  "end_room": "END",
+  "rooms": [
+    {
+      "id": "Grand Foyer",
+      "entry_text": "You stand in the Grand Foyer. A crystal **chandelier** glitters overhead. To the north a large wooden **door** leads deeper into the mansion.",
+      "items": [
+        {
+          "name": "chandelier",
+          "type": "riddle",
+          "prompt": "I have pages but I’m not a bird; I hold letters but cannot write. What am I?",
+          "answer": "book",
+          "success_text": "As you whisper the answer, the chandelier dims for a moment then burns brighter in approval."
+        }
+      ],
+      "exits": [
+        {
+          "name": "door",
+          "direction": "north",
+          "to": "Library",
+          "locked": false,
+          "key": null
+        }
+      ]
+    },
+
+    {
+      "id": "Library",
+      "entry_text": "Rows of dusty **bookshelves** loom all around. A locked iron **gate** to the east bars passage to a darker hall.",
+      "entry_text_after": "Rows of dusty bookshelves loom all around. The iron gate to the east stands open, revealing a corridor beyond.",
+      "items": [
+        {
+          "name": "bookshelves",
+          "type": "inventory",
+          "description": "You tug a peculiar tome; the shelf slides, revealing a small Brass Key, which you pocket.",
+          "gives_item": "Brass Key"
+        }
+      ],
+      "exits": [
+        {
+          "name": "gate",
+          "direction": "east",
+          "to": "Portal Chamber",
+          "locked": true,
+          "key": "Brass Key"
+        },
+        {
+          "name": "door",
+          "direction": "south",
+          "to": "Grand Foyer",
+          "locked": false,
+          "key": null
+        }
+      ]
+    },
+
+    {
+      "id": "Portal Chamber",
+      "entry_text": "Swirling lights pulse within a stone **archway** at the center. A marble **pedestal** stands nearby.",
+      "entry_text_after": "The archway blazes with energy, stabilised and ready for you to step through.",
+      "items": [
+        {
+          "name": "pedestal",
+          "type": "riddle",
+          "prompt": "Speak the single word that opens every door, yet fits in no lock.",
+          "answer": "please",
+          "success_text": "At your courteous answer, the archway hums to life, radiating possibility.",
+          "gives_item": "pedestal_solved"
+        }
+      ],
+      "exits": [
+        {
+          "name": "archway",
+          "direction": "through",
+          "to": "END",
+          "locked": true,
+          "key": "pedestal_solved"
+        },
+        {
+          "name": "gate",
+          "direction": "west",
+          "to": "Library",
+          "locked": false,
+          "key": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "start_room": "Grand Foyer",
+  "end_room": "END",
+
+  "rooms": [
+
+    {
+      "id": "Grand Foyer",
+      "entry_text": "A cracked marble floor stretches outward. A towering **painting** of the mansion's founder dominates one wall. A carved oak **door** stands closed to the east, while a widening **arch** to the north leads into a grand gallery.",
+      "entry_text_after": "A cracked marble floor stretches outward. A towering **painting** of the mansion's founder dominates one wall, its eyes now glowing faintly. A carved oak **door** hangs invitingly ajar to the east, while a widening **arch** to the north leads into a grand gallery.",
+      "transform_text": "The painting's eyes now glow faintly, and the oak door to the east hangs invitingly ajar.",
+      "items": [
+        {
+          "name": "painting",
+          "type": "riddle",
+          "prompt": "What is always in front of you but can't be seen?",
+          "answer": "future",
+          "success_text": "The canvas ripples like water and drops a small Bronze Key at your feet.",
+          "gives_item": "Bronze Key"
+        }
+      ],
+      "exits": [
+        { "name": "arch",  "direction": "north", "to": "Gallery",   "locked": false },
+        { "name": "door",  "direction": "east",  "to": "Library",   "locked": true, "key": "Bronze Key" }
+      ]
+    },
+
+    {
+      "id": "Gallery",
+      "entry_text": "Pillars support a vaulted ceiling. A veiled marble **sculpture** rests upon a pedestal. West lies the ivy‑filled **conservatory**, east an arched **hall** opens to a courtyard, and south the **arch** returns to the foyer.",
+      "items": [
+        {
+          "name": "sculpture",
+          "type": "inventory",
+          "description": "As you lift the veil, a thin shard of marble chips free—perfectly smooth and strangely warm. You pocket it.",
+          "gives_item": "Marble Shard"
+        }
+      ],
+      "exits": [
+        { "name": "conservatory", "direction": "west",  "to": "Conservatory", "locked": false },
+        { "name": "hall",         "direction": "east",  "to": "Courtyard",     "locked": false },
+        { "name": "arch",         "direction": "south", "to": "Grand Foyer",   "locked": false }
+      ]
+    },
+
+    {
+      "id": "Library",
+      "entry_text": "Dusty shelves tower overhead. A rotating **globeshelf** creaks softly. A silent **statue** of a robed librarian watches. A trapdoor with an iron **stair** leads downward—but its mechanism is sealed. West a **door** returns to the foyer.",
+      "entry_text_after": "Dusty shelves tower overhead. A rotating **globeshelf** creaks softly. A silent **statue** of a robed librarian watches. A trapdoor with an iron **stair** yawns open, revealing a spiral stair that disappears into darkness below. West a **door** returns to the foyer.",
+      "transform_text": "The trapdoor yawns open, revealing a spiral stair that disappears into darkness below.",
+      "items": [
+        {
+          "name": "globeshelf",
+          "type": "inventory",
+          "description": "You spin the **globeshelf** and a hidden compartment clicks open—inside lies a small Silver Key.",
+          "gives_item": "Silver Key"
+        },
+        {
+          "name": "statue",
+          "type": "riddle",
+          "prompt": "I have cities, but no houses; mountains, but no trees; and water, but no fish. What am I?",
+          "answer": "map",
+          "success_text": "At the word, the statue's book slides aside, revealing an ancient parchment map which you take.",
+          "gives_item": "Map"
+        }
+      ],
+      "exits": [
+        { "name": "door", "direction": "west", "to": "Grand Foyer", "locked": false },
+        { "name": "stair", "direction": "down", "to": "Cellar", "locked": true, "key": "Map" }
+      ]
+    },
+
+    {
+      "id": "Conservatory",
+      "entry_text": "Broken glass lets moonlight bathe an overgrown **fountain**. A wrought‑iron **door** opens north toward an armory, while an ivy‑draped **arch** east returns to the gallery.",
+      "items": [
+        {
+          "name": "fountain",
+          "type": "riddle",
+          "prompt": "I speak without a mouth and hear without ears. I have nobody, but I come alive with wind. What am I?",
+          "answer": "echo",
+          "success_text": "Water rises, forms a glistening droplet that solidifies into a sapphire‑bright gem in your hand.",
+          "gives_item": "Water Gem"
+        }
+      ],
+      "exits": [
+        { "name": "door", "direction": "north", "to": "Armory",   "locked": false },
+        { "name": "arch", "direction": "east",  "to": "Gallery",  "locked": false }
+      ]
+    },
+
+    {
+      "id": "Armory",
+      "entry_text": "Suits of armor stand in silent rows. A wall‑mounted **rack** bristles with ancient weapons. A barred **gate** in the north wall leads further, and a **door** south returns to the conservatory.",
+      "entry_text_after": "Suits of armor stand in silent rows. A wall‑mounted **rack** bristles with ancient weapons. A **gate** in the north wall stands open, revealing a stair up toward a starlit chamber, and a **door** south returns to the conservatory.",
+      "transform_text": "With a metallic groan the northern gate stands open, revealing a stair up toward a starlit chamber.",
+      "items": [
+        {
+          "name": "rack",
+          "type": "inventory",
+          "description": "Behind the spear tips you find a perfectly ground crystal lens—clearly part of a telescope.",
+          "gives_item": "Lens"
+        }
+      ],
+      "exits": [
+        { "name": "door", "direction": "south", "to": "Conservatory", "locked": false },
+        { "name": "gate", "direction": "north", "to": "Observatory",  "locked": true,  "key": "Silver Key" }
+      ]
+    },
+
+    {
+      "id": "Courtyard",
+      "entry_text": "Wild grass sways around a cracked stone **sundial**. Ivy‑covered walls surround the yard. A vine‑draped **hall** west returns to the gallery. A weather‑worn **tower** staircase rises north, and moss‑covered stones hint at a sealed **stairs** descending into darkness.",
+      "entry_text_after": "Wild grass sways around a cracked stone **sundial**. Ivy‑covered walls surround the yard. A vine‑draped **hall** west returns to the gallery. A weather‑worn **tower** staircase rises north, and the once sealed **stairs** now descend openly into the depths.",
+      "transform_text": "Stone grates grind aside: a stair now descends into the depths.",
+      "items": [
+        {
+          "name": "sundial",
+          "type": "riddle",
+          "prompt": "What flies forever, rests never?",
+          "answer": "time",
+          "success_text": "The gnomon casts a sudden shadow; a hidden mechanism clunks somewhere beneath you.",
+          "gives_item": "StairOpen"
+        }
+      ],
+      "exits": [
+        { "name": "hall",   "direction": "west",  "to": "Gallery",              "locked": false },
+        { "name": "tower",  "direction": "north", "to": "Observatory",          "locked": true,  "key": "Lens" },
+        { "name": "stairs", "direction": "down",  "to": "Underground Stairwell","locked": true,  "key": "StairOpen" }
+      ]
+    },
+
+    {
+      "id": "Observatory",
+      "entry_text": "A domed ceiling reveals glittering constellations. A brass **telescope** stands centered. A narrow **gate** east returns to the armory; a winding **stair** south descends to the courtyard.",
+      "items": [
+        {
+          "name": "telescope",
+          "type": "riddle",
+          "prompt": "Brighter than jewels, loud as thunder, never still, a thing of wonder. What am I?",
+          "answer": "star",
+          "success_text": "Through the lens you trace a constellation; lines on parchment glow, forming a detailed star‑chart you keep.",
+          "gives_item": "Star Chart"
+        }
+      ],
+      "exits": [
+        { "name": "gate",  "direction": "east",  "to": "Armory",    "locked": false },
+        { "name": "stair", "direction": "south", "to": "Courtyard", "locked": false }
+      ]
+    },
+
+    {
+      "id": "Underground Stairwell",
+      "entry_text": "Dripping water echoes off stone. A sputtering **torch** rests in its bracket. A damp **passage** heads south toward lapping water. A sealed iron **hatch** east leads somewhere, and the spiraling **staircase** ascends back up.",
+      "entry_text_after": "Dripping water echoes off stone. A sputtering **torch** rests in its bracket. A damp **passage** heads south toward lapping water. An iron **hatch** to the east stands ajar, a chill draft wafting from the darkness beyond, and the spiraling **staircase** ascends back up.",
+      "transform_text": "The iron hatch now stands ajar, a chill draft wafting from the darkness beyond.",
+      "items": [
+        {
+          "name": "torch",
+          "type": "inventory",
+          "description": "You lift the **torch**; its flames brighten and warm your hand.",
+          "gives_item": "Torch"
+        }
+      ],
+      "exits": [
+        { "name": "staircase", "direction": "up",     "to": "Courtyard", "locked": false },
+        { "name": "passage",   "direction": "south",  "to": "Boat Dock", "locked": false },
+        { "name": "hatch",     "direction": "east",   "to": "Cellar",    "locked": true,  "key": "Torch" }
+      ]
+    },
+
+    {
+      "id": "Boat Dock",
+      "entry_text": "A subterranean lake glimmers faintly. A small wooden **boat** rocks gently at its moorings—yet no oar is in sight. A dark **passage** north returns to the stairwell.",
+      "entry_text_after": "A subterranean lake glimmers faintly. A small wooden **boat** rocks gently at its moorings, an oar resting in its locks and its prow glowing where a blue gem is set—ready for the crossing. A dark **passage** north returns to the stairwell.",
+      "transform_text": "The oar rests in its locks and the boat's prow glows where a blue gem is set—ready for the crossing.",
+      "items": [],
+      "exits": [
+        { "name": "passage", "direction": "north",  "to": "Underground Stairwell", "locked": false },
+        { "name": "boat",    "direction": "across", "to": "Alchemical Laboratory", "locked": true, "key": "Oar" }
+      ]
+    },
+
+    {
+      "id": "Cellar",
+      "entry_text": "Cobwebs drape splintered beams. A cracked **barrel** lies overturned. A rickety **ladder** rises to a trapdoor, while a rusted **door** west leads back toward the stairwell.",
+      "items": [
+        {
+          "name": "barrel",
+          "type": "inventory",
+          "description": "You roll the **barrel** aside and find a sturdy wooden oar hidden underneath.",
+          "gives_item": "Oar"
+        }
+      ],
+      "exits": [
+        { "name": "ladder", "direction": "up",   "to": "Library",              "locked": false },
+        { "name": "door",   "direction": "west", "to": "Underground Stairwell","locked": false }
+      ]
+    },
+
+    {
+      "id": "Alchemical Laboratory",
+      "entry_text": "Glowing liquids bubble in delicate glassware. A gleaming **alembic** dominates the bench. A dormant stone **portal** stands to the north, and a moored **boat** south returns to the dock.",
+      "entry_text_after": "Glowing liquids bubble in delicate glassware. A gleaming **alembic** erupts in golden fire. A stone **portal** to the north vibrates with power, and a moored **boat** south returns to the dock. The Philosopher's Stone cools in your palm.",
+      "transform_text": "The alembic erupts in golden fire; the Philosopher's Stone cools in your palm as the portal frame vibrates with power.",
+      "items": [
+        {
+          "name": "alembic",
+          "type": "riddle",
+          "prompt": "Feed me and I live, give me drink and I die. What am I?",
+          "answer": "fire",
+          "success_text": "The liquids ignite, condensing into a single radiant gem—the legendary Philosopher's Stone.",
+          "gives_item": "Philosopher's Stone"
+        }
+      ],
+      "exits": [
+        { "name": "boat",   "direction": "south", "to": "Boat Dock",      "locked": false },
+        { "name": "portal", "direction": "north", "to": "Portal Chamber", "locked": true, "key": "Philosopher's Stone" }
+      ]
+    },
+
+    {
+      "id": "Portal Chamber",
+      "entry_text": "Arcane sigils circle a colossal stone **archway**. Its hollow center shimmers faintly. A narrow **corridor** south slips back to the laboratory.",
+      "entry_text_after": "Arcane sigils circle a colossal stone **archway** that roars with life, its center swirling with limitless night. A narrow **corridor** south slips back to the laboratory.",
+      "transform_text": "With a thunderous boom, the archway roars to life—its center swirling with limitless night.",
+      "items": [],
+      "exits": [
+        { "name": "corridor", "direction": "south",  "to": "Alchemical Laboratory", "locked": false },
+        { "name": "archway",  "direction": "through","to": "END",                  "locked": true, "key": "Philosopher's Stone" }
+      ]
+    }
+
+  ]
+}

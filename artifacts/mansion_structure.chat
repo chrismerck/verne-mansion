@@ -1,0 +1,206 @@
+# Step: Game Structure Planning
+# Model: gpt-4.5-preview
+# Temperature: 0.7
+
+## System Message ##
+You are a skilled puzzle-game designer, specializing in Victorian-era mysteries inspired by Jules Verne. Produce valid JSON output only, omitting any additional comments or formatting.
+
+## User Message ##
+
+    Based explicitly on the following background lore, devise a detailed and intriguing mansion layout for a puzzle-adventure web game:
+
+    
+        In the waning years of the 19th century, Lucien Ravenshade, a scholar and explorer of extraordinary ambition and eccentricity, had become an enigma whispered about in drawing rooms across Europe. Born into great wealth, Ravenshade found conventional pursuits unworthy of his restless imagination. His insatiable curiosity, matched only by his boundless resources, drove him across oceans and continents, delving into the unknown realms of both science and myth.
+
+Inspired by the visionary journeys chronicled by his contemporaries—such as Professor Pierre Aronnax's undersea adventures aboard Captain Nemo’s Nautilus, or Phileas Fogg’s legendary voyage around the world—Lucien undertook expeditions into the most remote and forbidding regions of the earth. Each voyage brought back peculiar artifacts, volumes of rare lore, and whispered rumors of discoveries too fantastic to reveal openly.
+
+Yet, it was in the quiet countryside of Northern England that Lucien chose to build Ravenshade Manor. Designed with intricate complexity and riddled with concealed passages, the mansion was more than a mere home: it was a manifestation of Lucien’s obsession with secrecy and discovery. Within its walls, he amassed an unparalleled collection of treasures: ancient maps inscribed in forgotten tongues, contraptions engineered from blueprints too advanced for their era, and fragments of civilizations said to exist only in legend.
+
+In his latter years, Lucien became increasingly withdrawn, speaking cryptically of a groundbreaking revelation—an invention or perhaps a discovery—that would forever alter humanity’s understanding of time and space. He filled his journals with obscure references to "Chronal Resonators," machines capable of bending reality, and doors "between worlds." Drawing from the speculative visions of Jules Verne himself, Lucien hinted at realms buried beneath the earth, submerged in the depths of the ocean, or hidden among the clouds.
+
+Then, without explanation, Lucien vanished.
+
+For decades thereafter, Ravenshade Manor stood sealed and silent, guarded by a trust whose instructions forbade entry except under extraordinary circumstances. Persistent rumors suggested the mansion was more alive than abandoned—strange lights flickering in windows, spectral figures glimpsed through curtains, and music drifting hauntingly from empty halls. The townsfolk whispered that Lucien had not truly departed but instead become ensnared in his own experiments, caught between realities.
+
+Now, a century later, you—a historian renowned for your expertise on Victorian-era mysteries—receive a cryptic invitation bearing the Ravenshade family seal. Curious and compelled by the offer of uncovering truths long buried, you journey to Ravenshade Manor. But upon crossing the threshold, it swiftly becomes apparent that Lucien’s legacy remains active, his puzzles, secrets, and devices waiting patiently for someone clever and bold enough to unravel them.
+
+Each room within Ravenshade Manor is layered with complexity, as if the house itself were an immense puzzle designed by Lucien to protect—and perhaps reveal—his ultimate discovery. From locked chambers and hidden laboratories to secret observatories observing impossible constellations, every passageway opened and puzzle solved draws you closer to Lucien's greatest secret: a device capable of transcending the limitations of space and time.
+
+Yet the mansion is no passive vault; its enigmatic machinery, influenced by Lucien’s dabbling with forces he scarcely understood, constantly rearranges pathways and puzzles, challenging you anew with each step forward. Ravenshade Manor demands intelligence, observation, and courage. To succeed, you must not only decipher the puzzles but understand the ambitions and fears of Lucien Ravenshade himself, unraveling a mystery that spans realms both known and unknowable.
+
+Ultimately, your exploration will determine whether Lucien Ravenshade’s work was madness or genius, and if the secret he left behind holds the potential to illuminate humanity’s future—or doom it.
+
+
+    Requirements:
+    - Precisely 30 uniquely themed rooms influenced by Lucien Ravenshade's Victorian era eccentricities and Jules Verne-inspired inventions.
+    - Each room explicitly named (evocative and theme-appropriate) and briefly described.
+    - Clearly outline room exits, including stair cases, doorways, locked doors, or secret passages of any kind. (Do not specify the room names of the exits, just the directions.) 
+    - Valid exit directions are N, S, E, W, U (up) and D (down).
+    - Start with "Grand Vestibule" and end with "Portal Chamber".
+    - Keep output strictly in valid JSON format:
+    
+    {"rooms": [ {"name": "Concise Room Name", "theme": "Room Thematic description", "exits": {"N": "locked door", "U": "staircase", "W": "hidden passage behind bookshelf"} }] }
+    
+
+---------- RESPONSE ----------
+
+## Assistant Message ##
+{
+  "rooms": [
+    {
+      "name": "Grand Vestibule",
+      "theme": "A grand entrance hall adorned with ornate mirrors, marble statues, and an intricate mosaic depicting mythical voyages.",
+      "exits": {"N": "large oak doors", "E": "arched doorway", "W": "arched doorway", "U": "grand staircase"}
+    },
+    {
+      "name": "Library of Whispers",
+      "theme": "Shelves filled with rare tomes, illuminated manuscripts, and mechanical bookcases that shift subtly, whispering cryptic phrases.",
+      "exits": {"S": "arched doorway", "E": "hidden passage behind bookshelf"}
+    },
+    {
+      "name": "Atrium of Stars",
+      "theme": "Glass-domed chamber with astronomical instruments tracking impossible constellations and planetary alignments.",
+      "exits": {"W": "arched doorway", "U": "spiral staircase"}
+    },
+    {
+      "name": "Gallery of Curiosities",
+      "theme": "Exhibits displaying peculiar artifacts from Lucien's expeditions—masks, idols, and mechanical oddities behind glass cases.",
+      "exits": {"N": "ornate doorway", "S": "large oak doors"}
+    },
+    {
+      "name": "Clockwork Conservatory",
+      "theme": "A lush greenhouse filled with mechanical plants and clockwork birds humming melodically.",
+      "exits": {"S": "concealed glass door", "E": "iron gate"}
+    },
+    {
+      "name": "Hall of Portraits",
+      "theme": "Portraits of Lucien's ancestors whose eyes seem to watch your every movement, occasionally shifting position.",
+      "exits": {"W": "ornate doorway", "N": "hidden panel behind portrait"}
+    },
+    {
+      "name": "Subterranean Laboratory",
+      "theme": "An underground chamber filled with bubbling vats, Tesla coils, and strange chemical apparatus emitting eerie glows.",
+      "exits": {"U": "hidden staircase", "N": "reinforced iron door"}
+    },
+    {
+      "name": "Mechanical Menagerie",
+      "theme": "Room housing life-sized mechanical animals from exotic locations, each with intricate mechanisms that activate unexpectedly.",
+      "exits": {"W": "iron gate", "E": "secret sliding panel"}
+    },
+    {
+      "name": "Observatory of Echoes",
+      "theme": "A high tower filled with telescopes and acoustic devices that capture distant sounds and mysterious signals from the ether.",
+      "exits": {"D": "spiral staircase"}
+    },
+    {
+      "name": "Chamber of Tides",
+      "theme": "Circular chamber with a pool mimicking ocean tides, housing underwater contraptions and deep-sea artifacts.",
+      "exits": {"W": "concealed glass door", "E": "watertight hatch"}
+    },
+    {
+      "name": "Cryptic Armory",
+      "theme": "Weapons and armor from lost civilizations adorned with inscriptions hinting at forgotten battles and secret histories.",
+      "exits": {"S": "hidden panel behind portrait"}
+    },
+    {
+      "name": "Steamwork Kitchen",
+      "theme": "Automated kitchen with steam-powered devices, copper pots, and perpetual motion cooking contraptions still running unattended.",
+      "exits": {"N": "concealed dumbwaiter", "W": "arched doorway"}
+    },
+    {
+      "name": "Ballroom of Reflections",
+      "theme": "Elegant ballroom with mirrored walls creating infinite reflections, making orientation difficult and hiding secret doors.",
+      "exits": {"E": "secret mirrored door", "S": "grand staircase"}
+    },
+    {
+      "name": "Inventor's Workshop",
+      "theme": "Room cluttered with half-built inventions, gears, sketches, and mechanical prototypes scattered across workbenches.",
+      "exits": {"W": "reinforced iron door", "D": "trapdoor"}
+    },
+    {
+      "name": "Garden Maze",
+      "theme": "Outdoor hedge maze filled with hidden mechanical gates and sculptures that shift position to confuse intruders.",
+      "exits": {"N": "garden archway", "S": "garden archway"}
+    },
+    {
+      "name": "Hall of Maps",
+      "theme": "Collection of ancient maps depicting mythical lands, hidden islands, and subterranean worlds.",
+      "exits": {"E": "hidden passage behind tapestry", "W": "secret sliding panel"}
+    },
+    {
+      "name": "Aquatic Gallery",
+      "theme": "Glass-walled chambers filled with exotic marine life and nautical artifacts, softly illuminated by phosphorescent light.",
+      "exits": {"W": "watertight hatch", "N": "spiral staircase"}
+    },
+    {
+      "name": "Tesla Chamber",
+      "theme": "Room filled with Tesla coils, sparking generators, and electrical apparatus humming with latent energy.",
+      "exits": {"S": "hidden staircase", "E": "secured copper door"}
+    },
+    {
+      "name": "Crystal Solarium",
+      "theme": "A glass-walled chamber filled with intricate crystal formations refracting sunlight into puzzling patterns.",
+      "exits": {"W": "secured copper door", "U": "glass spiral staircase"}
+    },
+    {
+      "name": "Parlor of Automatons",
+      "theme": "Elegant sitting room populated by life-like mechanical automatons programmed to interact in eerily human ways.",
+      "exits": {"N": "secret mirrored door", "E": "concealed dumbwaiter"}
+    },
+    {
+      "name": "Frozen Conservatory",
+      "theme": "A chamber artificially frozen, housing plants and animals preserved in ice blocks from polar expeditions.",
+      "exits": {"S": "hidden passage behind tapestry"}
+    },
+    {
+      "name": "Phantom Theater",
+      "theme": "Small private theater with ghostly projections reenacting Lucien’s journeys and enigmatic monologues.",
+      "exits": {"W": "garden archway"}
+    },
+    {
+      "name": "Chamber of Gears",
+      "theme": "Massive gears and clockwork mechanisms constantly rotating, rearranging pathways and creating temporary passages.",
+      "exits": {"N": "rotating gear door", "E": "rotating gear door"}
+    },
+    {
+      "name": "Celestial Music Room",
+      "theme": "Instruments playing themselves, creating celestial harmonies said to resonate with time itself.",
+      "exits": {"W": "glass spiral staircase"}
+    },
+    {
+      "name": "Forgotten Wine Cellar",
+      "theme": "Dust-covered racks of rare vintages hiding a secret passage among the barrels leading deeper underground.",
+      "exits": {"U": "trapdoor", "E": "secret tunnel"}
+    },
+    {
+      "name": "Vault of Echoing Steps",
+      "theme": "Stone chamber where footsteps echo strangely, hinting at hidden voids and secret compartments.",
+      "exits": {"W": "secret tunnel", "N": "locked iron grille"}
+    },
+    {
+      "name": "Laboratory of Chronal Resonance",
+      "theme": "Devices humming with temporal energy, clocks running at varied speeds, and notes on time manipulation experiments.",
+      "exits": {"S": "locked iron grille", "E": "heavy brass door"}
+    },
+    {
+      "name": "Sanctuary of Lost Relics",
+      "theme": "Hidden vault safeguarding relics rumored to be from civilizations outside known history.",
+      "exits": {"W": "heavy brass door", "N": "concealed spiral staircase"}
+    },
+    {
+      "name": "Chasm Bridge",
+      "theme": "Bridge spanning a mysterious chasm, machinery below churning with energies from unknown sources.",
+      "exits": {"S": "concealed spiral staircase", "N": "massive metallic gate"}
+    },
+    {
+      "name": "Portal Chamber",
+      "theme": "Central chamber dominated by Lucien’s ultimate device—a shimmering gateway humming with uncanny power, hinting passage to realms beyond.",
+      "exits": {"S": "massive metallic gate"}
+    }
+  ]
+}
+
+---------- USAGE ----------
+Prompt Tokens: 1034
+Completion Tokens: 1753
+Total Tokens: 2787

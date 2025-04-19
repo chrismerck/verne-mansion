@@ -54,14 +54,19 @@ ROOM_DEFINITION_SYSTEM = (
     "Output detailed JSON only; omit any commentary or markdown formatting."
 )
 
-def get_room_definition_user_prompt(room_name, theme_description):
+def get_room_definition_user_prompt(room_name, theme_description, exits):
     return f"""
     Expand into vivid detail the room titled "{room_name}", specifically considering the theme: "{theme_description}" from Ravenshade Manor's Victorian puzzle-adventure.
+
+    The room has the following exits: {exits}
 
     Provide exactly the following in JSON format:
     - "interactable_objects": an array of distinct room objects (e.g., mechanical contraptions, maps, furniture, artifacts, Verne-inspired technology).
     - "entry_exit_points": clearly categorized doorways, locked doors, or concealed secret passages connecting to neighboring rooms.
-    - "hidden_mechanics": special hidden interactive features aligned with Lucien Ravenshade's experiments and Victorian-era ingenuity.
+    - "mechanics": interactive features aligned with Lucien Ravenshade's experiments and Victorian-era ingenuity.
+
+    Please consider that the interaction with the room will be done through simple text commands or list of available actions,
+    and the graphics will be static images.
 
     Output JSON only, strictly conforming to clarity and readability.
     """
@@ -322,14 +327,14 @@ def game_structure_planner(user_prompt):
 # 2. Room Definition LLM (run in parallel for each room)
 #    Model: gpt-4o (creative detailing)
 # -------------------------------------------------------------------
-def define_room(room_name, theme_description):
+def define_room(room_name, theme_description, exits):
     """
     Expands on a single room by listing interactable objects, 
     entry/exit points, secrets, etc., returning JSON.
     """
     messages = [
         {"role": "system", "content": ROOM_DEFINITION_SYSTEM},
-        {"role": "user", "content": get_room_definition_user_prompt(room_name, theme_description)}
+        {"role": "user", "content": get_room_definition_user_prompt(room_name, theme_description, exits)}
     ]
     sanitized_room_name = sanitize_filename(room_name)
     log_base = os.path.join("artifacts", "room_definition", sanitized_room_name)
@@ -476,9 +481,10 @@ Ultimately, your exploration will determine whether Lucien Ravenshade’s work w
     for room in mansion_structure.get("rooms", []):
         room_name = room["name"]
         theme = room["theme"]
+        exits = room["exits"]
         
         # Get basic breakdown
-        room_def = define_room(room_name, theme)
+        room_def = define_room(room_name, theme, exits)
 
         # Suppose we pick one object to design a puzzle for demonstration
         if room_def["interactable_objects"]:
