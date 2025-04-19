@@ -28,16 +28,21 @@ body, html {
     font-size: 1.2em;
     line-height: 1.5;
     text-shadow: 0 0 5px #0f0; /* Add a subtle glow */
-    background: rgba(0, 0, 0, 0.6); /* Slightly darker background for better text readability */
     max-height: calc(100% - 60px); /* Ensure space for input plus some buffer */
     display: flex;
     flex-direction: column;
+    align-items: flex-start; /* ADD: Prevent items from stretching full width */
 }
 
 #console-output > div {
     margin-bottom: 8px; /* Add space between text blocks */
-    width: 100%;
     word-break: break-word; /* Ensure long words wrap */
+    background: rgba(0, 0, 0, 0.4); /* Apply background here - MORE TRANSPARENT */
+    padding: 4px 8px; /* Add padding inside the background */
+    border-radius: 3px; /* Optional: slightly rounded corners */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+    width: fit-content;
+    max-width: 100%; /* Ensure it doesn't exceed container width */
 }
 
 .typewriter-char {
