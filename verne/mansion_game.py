@@ -138,6 +138,9 @@ class MansionGame:
             # mark room as transformed to use entry_text_after from now on
             if "entry_text_after" in room:
                 self.transformed.add(room["id"])
+                # Immediately show the transformed room description
+                print(f"\n[ {self.current} ]")
+                print("\n" + render(room["entry_text_after"]))
         else:
             print("That doesn't seem right.")
 
@@ -155,6 +158,9 @@ class MansionGame:
                     # if the room has an alternate description, flip it on unlock
                     if "entry_text_after" in room:
                         self.transformed.add(room["id"])
+                        # Immediately show the transformed room description
+                        print(f"\n[ {self.current} ]")
+                        print("\n" + render(room["entry_text_after"]))
                 else:
                     print("It won't budge; seems locked.")
                     return True

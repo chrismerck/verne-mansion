@@ -41,6 +41,17 @@ function getAvailableActions(room, includeGlobal = false) {
     return actions.sort();
 }
 
+// Function to immediately update background image without redrawing room
+function updateBackgroundImage() {
+    const room = roomIndex[currentRoomId];
+    if (!room) return;
+    
+    const roomImageName = sanitizeForFilename(room.id);
+    const imageState = transformedRooms.has(currentRoomId) ? 'after' : 'before';
+    const imageUrl = `rooms/${roomImageName}/${imageState}.png`;
+    gameContainer.style.backgroundImage = `url('${imageUrl}')`;
+}
+
 // --- Typewriter Effect ---
 
 function typeWriter(text, element, callback) {
@@ -271,11 +282,13 @@ function handleRiddleAnswer(attempt) {
                          consoleOutput.appendChild(transformDiv);
                          typeWriter(room.transform_text, transformDiv, () => {
                               transformedRooms.add(currentRoomId); // Mark transformed AFTER text is shown
+                              updateBackgroundImage(); // Update background immediately
                               consoleOutput.scrollTop = consoleOutput.scrollHeight;
                          });
                      } else if (room && room.entry_text_after && !transformedRooms.has(currentRoomId)) {
                          // Fallback: if no transform_text but entry_text_after exists, mark transformed
                          transformedRooms.add(currentRoomId);
+                         updateBackgroundImage(); // Update background immediately
                          // Consider if we need to update display here? Probably not,
                          // as the change will be seen on next entry.
                      } else {
@@ -289,10 +302,12 @@ function handleRiddleAnswer(attempt) {
                        consoleOutput.appendChild(transformDiv);
                        typeWriter(room.transform_text, transformDiv, () => {
                             transformedRooms.add(currentRoomId); // Mark transformed AFTER text is shown
+                            updateBackgroundImage(); // Update background immediately
                             consoleOutput.scrollTop = consoleOutput.scrollHeight;
                        });
                    } else if (room && room.entry_text_after && !transformedRooms.has(currentRoomId)) {
                        transformedRooms.add(currentRoomId);
+                       updateBackgroundImage(); // Update background immediately
                        consoleOutput.scrollTop = consoleOutput.scrollHeight;
                    } else {
                        consoleOutput.scrollTop = consoleOutput.scrollHeight;
@@ -449,12 +464,14 @@ function processCommand(cmd) {
                                             consoleOutput.appendChild(transformDiv);
                                             typeWriter(room.transform_text, transformDiv, () => {
                                                 transformedRooms.add(currentRoomId);
+                                                updateBackgroundImage(); // Update background immediately
                                                 consoleOutput.scrollTop = consoleOutput.scrollHeight;
                                             });
                                         } else if (room && room.entry_text_after && !transformedRooms.has(currentRoomId)) {
                                             // If taking the item implies a state change for entry_text_after later
                                             // but without an immediate transform_text
                                             transformedRooms.add(currentRoomId);
+                                            updateBackgroundImage(); // Update background immediately
                                             consoleOutput.scrollTop = consoleOutput.scrollHeight;
                                         } else {
                                              consoleOutput.scrollTop = consoleOutput.scrollHeight;
@@ -506,6 +523,7 @@ function processCommand(cmd) {
                              consoleOutput.appendChild(transformDiv);
                              typeWriter(room.transform_text, transformDiv, () => {
                                  transformedRooms.add(currentRoomId); // Mark transformed AFTER text shown
+                                 updateBackgroundImage(); // Update background immediately
                                  // Player must enter command again to move
                                  consoleOutput.scrollTop = consoleOutput.scrollHeight;
                                  // Re-enable input if needed after transform text
@@ -513,42 +531,43 @@ function processCommand(cmd) {
                                  if (!isWaitingForEnter && !isWaitingForAnswer) commandInput.focus();
                              });
                          } else {
-                             // Step 3: No transform text, or already transformed - prepare to move
-                             if (room.entry_text_after && !roomAlreadyTransformed) {
-                                 transformedRooms.add(currentRoomId); // Mark transformed if applicable
+                                 // Step 3: No transform text, or already transformed - prepare to move
+                                 if (room.entry_text_after && !roomAlreadyTransformed) {
+                                     transformedRooms.add(currentRoomId); // Mark transformed if applicable
+                                     updateBackgroundImage(); // Update background immediately
+                                 }
+                                 const dest = exit.to;
+                                 if (dest === gameData.end_room) {
+                                     displayOutput("\nYou step through the portal and feel reality twist…\nCongratulations – you have escaped the mansion!", true);
+                                     commandInput.disabled = true;
+                                     return; // End game
+                                 }
+                                 if (roomIndex[dest]) {
+                                     // Prepare to move, but wait for Enter
+                                     currentRoomId = dest; // Set the new room ID immediately
+                                     const nextRoomName = roomIndex[dest].id; // Get the name for the message
+                                     displayOutput(`You approach the ${exit.name} leading to the ${nextRoomName}...<br>Press ENTER to continue.`, true);
+                                     isWaitingForEnter = true;
+                                     commandInput.placeholder = "Press ENTER";
+                                     commandInput.focus(); // Input is now enabled, focus works
+                                 } else {
+                                     console.error("Error: Destination room not found:", dest);
+                                     displayOutput("That path leads nowhere (Error in game data).", true);
+                                      if (!isWaitingForAnswer && !isWaitingForEnter) commandInput.focus(); // Refocus on error
+                                 }
                              }
-                             const dest = exit.to;
-                             if (dest === gameData.end_room) {
-                                 displayOutput("\nYou step through the portal and feel reality twist…\nCongratulations – you have escaped the mansion!", true);
-                                 commandInput.disabled = true;
-                                 return; // End game
-                             }
-                             if (roomIndex[dest]) {
-                                 // Prepare to move, but wait for Enter
-                                 currentRoomId = dest; // Set the new room ID immediately
-                                 const nextRoomName = roomIndex[dest].id; // Get the name for the message
-                                 displayOutput(`You approach the ${exit.name} leading to the ${nextRoomName}...<br>Press ENTER to continue.`, true);
-                                 isWaitingForEnter = true;
-                                 commandInput.placeholder = "Press ENTER";
-                                 commandInput.focus(); // Input is now enabled, focus works
-                             } else {
-                                 console.error("Error: Destination room not found:", dest);
-                                 displayOutput("That path leads nowhere (Error in game data).", true);
-                                  if (!isWaitingForAnswer && !isWaitingForEnter) commandInput.focus(); // Refocus on error
-                             }
-                         }
-                     };
+                         };
 
-                     if (!roomAlreadyTransformed) {
-                        // Type the unlock message, then proceed in callback
-                        // REMOVE: Disable input during unlock message typing
-                        // REMOVE: commandInput.disabled = true;
-                        typeWriter(unlockMsg, unlockDiv, showUnlockMessageAndProceed);
-                     } else {
-                        // Room was already transformed, skip unlock message, just proceed
-                        // REMOVE: commandInput.disabled = true; // Disable input briefly while processing
-                        showUnlockMessageAndProceed();
-                     }
+                         if (!roomAlreadyTransformed) {
+                            // Type the unlock message, then proceed in callback
+                            // REMOVE: Disable input during unlock message typing
+                            // REMOVE: commandInput.disabled = true;
+                            typeWriter(unlockMsg, unlockDiv, showUnlockMessageAndProceed);
+                         } else {
+                            // Room was already transformed, skip unlock message, just proceed
+                            // REMOVE: commandInput.disabled = true; // Disable input briefly while processing
+                            showUnlockMessageAndProceed();
+                         }
 
                  } else {
                      displayOutput("It's locked.");
